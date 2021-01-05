@@ -13,6 +13,8 @@ import numpy as np
 import glob, os, zipfile, random, subprocess
 import pickle
 from sklearn.tree import export_graphviz
+import pydotplus
+import collections
 
 def getAgeDistribution(datasetDir, vtReportsDir, generateHistogram=False, histogramTitle="testhistogram"):
     """
@@ -181,7 +183,7 @@ def plotDatasetsFirstSeen(plotBars=True, plotLines=True):
             title = "Bars"
 
         plt.savefig("%s_first_seen_all.pdf" % title)
-        plt.savefit("%s_first_seen_all.pgf" % title)
+        plt.savefig("%s_first_seen_all.pgf" % title)
 
     except Exception as e:
         prettyPrintError(e)
@@ -222,12 +224,31 @@ def visualizeTreesInForests(clf, features, numTrees=1, whichTrees="random", tree
             treeIndex = random.randint(0, clf.n_estimators - 1) if whichTrees == "random" else clf.estimators_[index % clf.n_estimators]
             tTitle = "tree_%s" % treeIndex if treeTitle == "" else "tree_%s_%s" % (treeIndex, treeTitle.lower().replace(" ", "_"))
             prettyPrint("Visualizing tree \"%s.dot\"" % treeTitle)
-            export_graphviz(clf.estimators_[treeIndex], out_file='%s.dot' % tTitle, feature_names=features, class_names=["Benign", "Malicious"], rounded=True, proportion=False, filled=True) 
+            dot_data = export_graphviz(clf.estimators_[treeIndex], out_file='%s.dot' % tTitle, feature_names=features, class_names=["Benign", "Malicious"], rounded=True, proportion=False, filled=True) 
+            graph = pydotplus.graph_from_dot_data(open('%s.dot' % tTitle, 'rb').read())
+            edges = collections.defaultdict(list)
+            for edge in graph.get_edge_list():
+                edges[edge.get_source()].append(int(edge.get_destination()))
+            
+            # Iterate over edges and color them
+            for edge in edges:
+                edges[edge].sort()    
+                for i in range(2):
+                    dest = graph.get_node(str(edges[edge][i]))[0]
+                    if (str(edges[edge][i]) in edges.keys()):
+                        # Non-leaf node
+                        dest.set_fillcolor('#ffffff')
+                    else:                        
+                        color = ACMColors[2] if dest.get_label().lower().find("benign") != -1 else ACMColors[0]
+                        dest.set_fillcolor(color)
+                        
+            
             prettyPrint("Saving dot tree as PDF")
+            graph.write_pdf('%s.pdf' % tTitle)
             #subprocess.call(['dot', '-Tpng', '%s.dot' % treeTitle, '-o', '%s.png' % treeTitle, '-Gdpi=600'])
-            subprocess.call(['dot', '-Tpdf', '%s.dot' % tTitle, '-o', '%s.pdf' % tTitle, '-Gdpi=600'])
-            subprocess.call(['rm', '%s.dot' % tTitle])
-
+            #subprocess.call(['dot', '-Tpdf', '%s.dot' % tTitle, '-o', '%s.pdf' % tTitle, '-Gdpi=600'])
+            os.remove('%s.dot' % tTitle)
+            #subprocess.call(['rm', '%s.dot' % tTitle])
 
     except Exception as e:
         prettyPrintError(e)
