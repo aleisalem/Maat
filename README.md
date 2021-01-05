@@ -17,7 +17,7 @@ The current implementation depends on the following tools:
 
 ## Maat's ML-based Labeling Strategies
 
-![Maat's Process](https://github.com/tum-i22/Maat/blob/master/figures/Maat_Process.png "Maat's Process")
+![Maat's Process](https://github.com/aleisalem/Maat/blob/master/figures/Maat_Process.png "Maat's Process")
 
 Maat, mines ```VirusTotal``` scan reports to build ML-based labeling strategies. As seen in figure above, Maat starts by
 analyzing the ```VirusTotal``` scan reports of apps in the training dataset that were reanalyzed and downloaded at different points in time (i.e., t<sub>0</sub> , t<sub>1</sub> ,..., t<sub>m</sub>). In phase (1) we designate the ```VirusTotal``` scanners that achieve an average overall correctness rate of at least 0.90 between (**t<sub>0</sub>**) and September (**t<sub>m</sub>**) as the most correct scanners. Maat also finds the scanners that changed their verdicts at most 10% of the time (i.e., were stable 90% of the time), are considered. The output of this phase is an intersection of the most correct and stable ```VirusTotal``` scanners.
@@ -133,7 +133,7 @@ $> correctness.getMostCorrectScannersOverTime(datasetDir, vtReportsDirs, groundT
 
 ### Get Scanners' Certainty Scores (Over a period of time)
 
-This method calculates the __certainty___ score of different ```VirusTotal``` scanners as a measure of the stability of the verdicts they give to apps. The certainty score divides the occurences of the most common label given by a scanner to an app by the total number of labels. For example, if a scanner (![signa](http://www.sciweavers.org/upload/Tex2Img_1579079559/render.png)) gave the following labels ```labels = [True, False, True, True]``` over four points in time (i.e., True = Detected (malicious)) to an app  (![alpha](http://www.sciweavers.org/upload/Tex2Img_1579079668/render.png)), the certainty score is calculated as ```labels.count(max(labels)/len(labels)```, which should be 0.75. That is, the scanner is certain about its labels 75\% of the time, regardless of their correctness.  
+This method calculates the __certainty___ score of different ```VirusTotal``` scanners as a measure of the stability of the verdicts they give to apps. The certainty score divides the occurences of the most common label given by a scanner to an app by the total number of labels. For example, if a scanner (![equation](http://www.sciweavers.org/tex2img.php?eq=\sigma&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=)) gave the following labels ```labels = [True, False, True, True]``` over four points in time (i.e., True = Detected (malicious)) to an app  (![equation](http://www.sciweavers.org/tex2img.php?eq=\alpha&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=)), the certainty score is calculated as ```labels.count(max(labels)/len(labels)```, which should be 0.75. That is, the scanner is certain about its labels 75\% of the time, regardless of their correctness.  
 
 ```
 $> from Maat.mining import evolution
