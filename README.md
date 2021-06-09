@@ -336,7 +336,18 @@ The ```SHA1``` hashes of ten apps randomly sampled from the [AMD](http://amd.arg
 For more information about the design and implementation of the tool, please refer to the paper cited below. Kindly consider citing our paper, if you find it useful in your research.
 
 ```
-To be updated.
+@article{10.1145/3465361,
+author = {Salem, Aleieldin and Banescu, Sebastian and Pretschner, Alexander},
+title = {Maat: Automatically Analyzing VirusTotal for Accurate Labeling and Effective Malware Detection},
+year = {2021},
+publisher = {Association for Computing Machinery},
+address = {New York, NY}
+url = {https://doi.org/10.1145/3465361},
+doi = {10.1145/3465361},
+journal = {ACM Trans. Priv. Secur.},
+keywords = {android security, malware detection, machine learning},
+issue_date = {To Appear}
+}
 ```
 
 We are constantly updating the source code and its corresponding documentation. However, should you have any inquiries about installing and using the code, please contact us:
