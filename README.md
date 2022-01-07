@@ -352,4 +352,4 @@ issue_date = {To Appear}
 
 We are constantly updating the source code and its corresponding documentation. However, should you have any inquiries about installing and using the code, please contact us:
 
-Alei Salem (aleieldin.salem@de.bosch.com)
+Alei Salem (aleieldin.salem@gmail.com)
